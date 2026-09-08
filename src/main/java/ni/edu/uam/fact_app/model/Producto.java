@@ -15,4 +15,5 @@ public class Producto {
     private int existencia;
     private String rutaImagen;
     private boolean activo;
+    private String codigo;
 }
