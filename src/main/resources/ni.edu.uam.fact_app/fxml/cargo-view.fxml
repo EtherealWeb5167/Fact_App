@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="Cargo">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="300.0" layoutY="10.0" text="ID">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextField alignment="TOP_CENTER" prefHeight="26.0" prefWidth="480.0" promptText="Ingrese el ID" />
+      <Label layoutX="300.0" layoutY="10.0" text="Nombre">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextField alignment="TOP_CENTER" prefHeight="26.0" prefWidth="482.0" promptText="Ingrese el nombre" />
+      <Label layoutX="272.0" layoutY="97.0" text="Descripcion">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextField alignment="TOP_LEFT" layoutX="69.0" layoutY="143.0" prefHeight="110.0" prefWidth="490.0" promptText="Ingrese la descripcion del cargo" />
+      <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="Agregar" />
+   </children>
+</VBox>

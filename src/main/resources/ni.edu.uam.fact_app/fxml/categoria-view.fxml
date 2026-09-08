@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="Categoria">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font></Label>
+      <Label layoutX="297.0" layoutY="10.0" text="ID">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <TextField prefHeight="26.0" prefWidth="183.0" promptText="Ingrese el ID" />
+      <Label layoutX="297.0" layoutY="66.0" text="Nombre">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <TextField layoutX="219.0" layoutY="122.0" prefHeight="26.0" prefWidth="341.0" promptText="Ingrese el nombre" />
+      <CheckBox mnemonicParsing="false" text="Categoria activa" />
+      <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="76.0" text="Agregar" />
+   </children>
+</VBox>
