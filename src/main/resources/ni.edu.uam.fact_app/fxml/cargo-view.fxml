@@ -1,34 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="650.0" spacing="12.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ni.edu.uam.fact_app.controller.CargoController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
    <children>
-      <Label text="Cargo">
+      <Label text="Gestion de cargos">
          <font>
-            <Font name="System Bold" size="20.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <Label layoutX="300.0" layoutY="10.0" text="ID">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <TextField alignment="TOP_CENTER" prefHeight="26.0" prefWidth="480.0" promptText="Ingrese el ID" />
-      <Label layoutX="300.0" layoutY="10.0" text="Nombre">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <TextField alignment="TOP_CENTER" prefHeight="26.0" prefWidth="482.0" promptText="Ingrese el nombre" />
-      <Label layoutX="272.0" layoutY="97.0" text="Descripcion">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <TextField alignment="TOP_LEFT" layoutX="69.0" layoutY="143.0" prefHeight="110.0" prefWidth="490.0" promptText="Ingrese la descripcion del cargo" />
-      <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="Agregar" />
+
+      <VBox spacing="8.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label prefWidth="90.0" text="ID:" />
+                  <TextField fx:id="txtId" prefHeight="26.0" prefWidth="150.0" promptText="ID " />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label prefWidth="90.0" text="Nombre:" />
+                  <TextField fx:id="txtNombre" promptText="Ingrese el nombre del cargo" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label prefWidth="90.0" text="Descripción:" />
+                  <TextField fx:id="txtDescripcion" promptText="Ingresa la descripcion del cargo" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#guardar" prefWidth="90.0" text="Agregar" />
+            <Button mnemonicParsing="false" onAction="#limpiar" prefWidth="90.0" text="Limpiar" />
+            <Button mnemonicParsing="false" onAction="#cerrar" prefWidth="90.0" text="Cerrar" />
+         </children>
+      </HBox>
+
+      <TableView fx:id="tblCargos" prefHeight="220.0" prefWidth="610.0" VBox.vgrow="ALWAYS">
+         <columns>
+            <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
+            <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre" />
+            <TableColumn fx:id="colDescripcion" prefWidth="320.0" text="Descripcion" />
+         </columns>
+      </TableView>
    </children>
 </VBox>
