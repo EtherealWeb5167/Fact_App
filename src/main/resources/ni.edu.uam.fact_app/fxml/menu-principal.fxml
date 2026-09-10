@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -39,6 +40,11 @@
     <center>
         <VBox alignment="CENTER" spacing="15.0" BorderPane.alignment="CENTER">
             <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/ni.edu.uam.fact_app/images/logo.png"/>
+                    </image>
+                </ImageView>
                 <Label text="Sistema de Facturacion">
                     <font>
                         <Font name="System Bold" size="28.0" />
