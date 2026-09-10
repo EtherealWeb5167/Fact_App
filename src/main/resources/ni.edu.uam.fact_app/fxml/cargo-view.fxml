@@ -32,7 +32,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Label prefWidth="90.0" text="Descripción:" />
+                  <Label prefWidth="90.0" text="Descripcion:" />
                   <TextField fx:id="txtDescripcion" promptText="Ingresa la descripcion del cargo" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>

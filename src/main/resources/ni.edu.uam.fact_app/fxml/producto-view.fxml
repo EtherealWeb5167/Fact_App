@@ -1,14 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ni.edu.uam.fact_app.controller.ProductoController"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox alignment="TOP_CENTER" prefHeight="650.0" prefWidth="850.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ni.edu.uam.fact_app.controller.ProductoController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <Label text="Gestion de Productos">
+            <font>
+                <Font name="System Bold" size="22.0" />
+            </font>
+        </Label>
 
-</AnchorPane>
+        <HBox spacing="20.0">
+            <children>
+                <GridPane hgap="10.0" vgap="10.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Codigo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtCodigo" promptText="Codigo unico" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtNombre" promptText="Nombre del producto" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="cmbCategoria" prefWidth="250.0" promptText="Seleccionar Categoria" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <Label text="Precio Venta:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <TextField fx:id="txtPrecio" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                        <Label text="Existencia:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                        <TextField fx:id="txtExistencia" promptText="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                        <Label text="Estado:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                        <CheckBox fx:id="chkActivo" mnemonicParsing="false" selected="true" text="Producto activo" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    </children>
+                </GridPane>
+
+                <VBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
+                    <children>
+                        <ImageView fx:id="imgProducto" fitHeight="140.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: #cccccc;" />
+                        <Button mnemonicParsing="false" onAction="#seleccionarImagen" text="Seleccionar Imagen" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#guardar" prefWidth="100.0" text="Guardar" />
+                <Button mnemonicParsing="false" onAction="#limpiar" prefWidth="100.0" text="Limpiar" />
+                <Button mnemonicParsing="false" onAction="#cerrar" prefWidth="100.0" text="Cerrar" />
+            </children>
+        </HBox>
+
+        <TableView fx:id="tblProductos" prefHeight="250.0" prefWidth="810.0" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colCodigo" prefWidth="100.0" text="Código" />
+                <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre" />
+                <TableColumn fx:id="colCategoria" prefWidth="140.0" text="Categoría" />
+                <TableColumn fx:id="colPrecio" prefWidth="110.0" text="Precio Venta" />
+                <TableColumn fx:id="colExistencia" prefWidth="110.0" text="Existencia" />
+                <TableColumn fx:id="colActivo" prefWidth="90.0" text="Activo" />
+            </columns>
+        </TableView>
+    </children>
+</VBox>

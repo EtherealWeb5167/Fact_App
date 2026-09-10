@@ -10,7 +10,7 @@ public class FacturacionApplication extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/ni.edu.uam.fact_app/fxml/menu-principal.fxml"));
-        stage.setTitle("Sistema de Facturación");
+        stage.setTitle("Sistema de Facturacion");
         stage.setScene(new Scene(loader.load(), 980, 600));
         stage.show();
     }

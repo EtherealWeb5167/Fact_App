@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public final class SceneManager {
+public class SceneManager {
 
     private SceneManager() { }
 
