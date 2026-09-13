@@ -28,10 +28,54 @@
                 </MenuBar>
                 <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
-                        <Button fx:id="btnProductos" mnemonicParsing="false" onAction="#abrirProductos" text=" Productos" />
-                        <Button fx:id="btnCategorias" mnemonicParsing="false" onAction="#abrirCategorias" text="Categorias" />
-                        <Button fx:id="btnCargos" mnemonicParsing="false" onAction="#abrirCargos" text=" Cargos" />
-                        <Button fx:id="btnSalir" mnemonicParsing="false" onAction="#salir" text="Salir" />
+                        <Button fx:id="btnProductos" mnemonicParsing="false" onAction="#abrirProductos">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@/ni.edu.uam.fact_app/icons/productos.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="Gestion de productos"/>
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnCategorias" mnemonicParsing="false" onAction="#abrirCategorias">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@/ni.edu.uam.fact_app/icons/categorias.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="Gestion de categorias"/>
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnCargos" mnemonicParsing="false" onAction="#abrirCargos">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@/ni.edu.uam.fact_app/icons/cargos.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="Gestion de cargos"/>
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnSalir" mnemonicParsing="false" onAction="#salir">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@/ni.edu.uam.fact_app/icons/salir.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="Salir de la aplicacion"/>
+                            </tooltip>
+                        </Button>
                     </items>
                 </ToolBar>
             </children>
