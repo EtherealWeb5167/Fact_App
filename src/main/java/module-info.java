@@ -2,6 +2,8 @@ module ni.edu.uam.fact_app {
     requires javafx.controls;
     requires javafx.fxml;
     requires static lombok;
+    requires org.postgresql.jdbc;
+    requires java.sql;
 
     exports ni.edu.uam.fact_app;
     exports ni.edu.uam.fact_app.application;

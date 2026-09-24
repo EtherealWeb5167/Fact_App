@@ -31,6 +31,7 @@ public class CategoriaController {
         categorias.add(new Categoria(2, "Bebidas", true));
         categorias.add(new Categoria(3, "Limpieza", true));
 
+
         if (tblCategorias != null) {
             tblCategorias.setItems(categorias);
         }
