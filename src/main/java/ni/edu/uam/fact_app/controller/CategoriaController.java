@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import ni.edu.uam.fact_app.dao.CategoriaDAO;
 import ni.edu.uam.fact_app.model.Categoria;
 
 public class CategoriaController {
@@ -19,6 +20,8 @@ public class CategoriaController {
     @FXML private TableColumn<Categoria, String> colNombre;
     @FXML private TableColumn<Categoria, Boolean> colActiva;
 
+    // Instancia del DAO para operaciones en base de datos
+    private final CategoriaDAO categoriaDAO = new CategoriaDAO();
     private final ObservableList<Categoria> categorias = FXCollections.observableArrayList();
 
     @FXML
@@ -27,16 +30,22 @@ public class CategoriaController {
         if (colNombre != null) colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         if (colActiva != null) colActiva.setCellValueFactory(new PropertyValueFactory<>("activa"));
 
-        categorias.add(new Categoria(1, "Alimentos", true));
-        categorias.add(new Categoria(2, "Bebidas", true));
-        categorias.add(new Categoria(3, "Limpieza", true));
-
-
         if (tblCategorias != null) {
             tblCategorias.setItems(categorias);
         }
 
-        chkActiva.setSelected(true);
+        if (chkActiva != null) {
+            chkActiva.setSelected(true);
+        }
+
+        // Carga las categorias reales desde PostgreSQL
+        cargarCategorias();
+    }
+
+    // Consulta la BD y llena la tabla
+    private void cargarCategorias() {
+        categorias.clear();
+        categorias.addAll(categoriaDAO.listar());
     }
 
     @FXML
@@ -48,21 +57,15 @@ public class CategoriaController {
             return;
         }
 
-        Integer id;
-        try {
-            if (!txtId.getText().isBlank()) {
-                id = Integer.parseInt(txtId.getText().trim());
-            } else {
-                id = categorias.size() + 1;
-            }
-        } catch (NumberFormatException e) {
-            mensaje(Alert.AlertType.ERROR, "El id debe ser un numero entero valido.");
-            return;
-        }
+        // Crea el objeto sin id porque PostgreSQL lo genera con SERIAL
+        Categoria categoria = new Categoria(null, nombre, chkActiva.isSelected());
+        // Guarda en la base de datos
+        categoriaDAO.guardar(categoria);
 
-        Categoria categoria = new Categoria(id, nombre, chkActiva.isSelected());
-        categorias.add(categoria);
         mensaje(Alert.AlertType.INFORMATION, "Categoria registrada correctamente.");
+
+        // Refresca la tabla y limpia los campos
+        cargarCategorias();
         limpiar();
     }
 

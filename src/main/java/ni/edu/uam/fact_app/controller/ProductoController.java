@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ni.edu.uam.fact_app.dao.CategoriaDAO;
+import ni.edu.uam.fact_app.dao.ProductoDAO;
 import ni.edu.uam.fact_app.model.Categoria;
 import ni.edu.uam.fact_app.model.Producto;
 
@@ -30,19 +32,15 @@ public class ProductoController {
     @FXML private TableColumn<Producto, Integer> colExistencia;
     @FXML private TableColumn<Producto, Boolean> colActivo;
 
+    // Instancias de DAO para consultar y guardar en la base de datos
+    private final ProductoDAO productoDAO = new ProductoDAO();
+    private final CategoriaDAO categoriaDAO = new CategoriaDAO();
+
     private ObservableList<Producto> productos = FXCollections.observableArrayList();
     private String rutaImagen;
 
     @FXML
     private void initialize() {
-        if (cmbCategoria != null) {
-            cmbCategoria.setItems(FXCollections.observableArrayList(
-                    new Categoria(1, "Alimentos", true),
-                    new Categoria(2, "Bebidas", true),
-                    new Categoria(3, "Limpieza", true)
-            ));
-        }
-
         if (colCodigo != null) colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         if (colNombre != null) colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         if (colCategoria != null) colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
@@ -57,6 +55,23 @@ public class ProductoController {
         if (chkActivo != null) {
             chkActivo.setSelected(true);
         }
+
+        // Carga los datos iniciales desde PostgreSQL
+        cargarCategorias();
+        cargarProductos();
+    }
+
+    // Carga las categorias activas en el ComboBox
+    private void cargarCategorias() {
+        if (cmbCategoria != null) {
+            cmbCategoria.setItems(FXCollections.observableArrayList(categoriaDAO.listar()));
+        }
+    }
+
+    // Carga todos los productos en la tabla
+    private void cargarProductos() {
+        productos.clear();
+        productos.addAll(productoDAO.listar());
     }
 
     @FXML
@@ -91,7 +106,8 @@ public class ProductoController {
                 return;
             }
 
-            productos.add(new Producto(
+            // Crea el objeto producto con los datos del formulario
+            Producto producto = new Producto(
                     null,
                     txtNombre.getText().trim(),
                     cmbCategoria.getValue(),
@@ -100,9 +116,15 @@ public class ProductoController {
                     rutaImagen,
                     chkActivo.isSelected(),
                     txtCodigo.getText().trim()
-            ));
+            );
+
+            // Guarda el producto en PostgreSQL
+            productoDAO.guardar(producto);
 
             mensaje(Alert.AlertType.INFORMATION, "Producto agregado correctamente.");
+
+            // Refresca la tabla de productos y limpia el formulario
+            cargarProductos();
             limpiar();
         } catch (NumberFormatException e) {
             mensaje(Alert.AlertType.ERROR, "Precio o existencia no validos.");
