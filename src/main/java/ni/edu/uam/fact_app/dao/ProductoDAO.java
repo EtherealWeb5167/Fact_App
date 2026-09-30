@@ -14,7 +14,8 @@ import java.util.List;
 public class ProductoDAO {
 
     // Guarda un nuevo producto con su categoria relacionada
-    public void guardar(Producto producto) {
+    // devuelve true si el INSERT se guardo en la base de datos
+    public boolean guardar(Producto producto) {
         String sql = """
             INSERT INTO producto (
                 codigo,
@@ -43,10 +44,11 @@ public class ProductoDAO {
             ps.setBoolean(7, producto.isActivo());
 
             // Ejecuta el insert en PostgreSQL
-            ps.executeUpdate();
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

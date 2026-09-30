@@ -2,6 +2,7 @@ package ni.edu.uam.fact_app.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -9,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.collections.transformation.FilteredList;
 import ni.edu.uam.fact_app.dao.CategoriaDAO;
 import ni.edu.uam.fact_app.dao.ProductoDAO;
 import ni.edu.uam.fact_app.model.Categoria;
@@ -41,7 +41,7 @@ public class ProductoController {
     private final CategoriaDAO categoriaDAO = new CategoriaDAO();
 
     private ObservableList<Producto> productos = FXCollections.observableArrayList();
-    // listra filtrada que se va a mostrar en el tableview
+    // lista filtrada que se va a mostrar en el tableview
     private FilteredList<Producto> productosFiltrados = new FilteredList<>(productos);
     private String rutaImagen;
 
@@ -57,18 +57,18 @@ public class ProductoController {
         // filtrar productos por estado (todos activos o inactivos)
         if(cmbFiltroEstado != null){
             cmbFiltroEstado.setItems(FXCollections.observableArrayList("Todos", "Activos", "Inactivos"));
-            cmbFiltroEstado.setValue("Todos"); // defeccto
+            cmbFiltroEstado.setValue("Todos"); // valor por defecto
             cmbFiltroEstado.valueProperty().addListener((obs, viejo, nuevo) -> aplicarFiltros());
         }
 
-        //Filtrrar mientras el usuario va escribiendo
+        // Filtrar mientras el usuario va escribiendo
         if(txtBuscar != null){
-            txtBuscar.textProperty().addListener((obs, viejo, nuevo) -> aplicarFiltros);
+            txtBuscar.textProperty().addListener((obs, viejo, nuevo) -> aplicarFiltros());
         }
 
-        //Filtrar por cateogira
+        // Filtrar por categoria
         if(cmbFiltroCategoria != null){
-            cmbFiltroCategoria.valueProperty().addListener((obs, viejo, nuevo) -> aplicarFiltros);
+            cmbFiltroCategoria.valueProperty().addListener((obs, viejo, nuevo) -> aplicarFiltros());
         }
 
         if (tblProductos != null) {
@@ -94,8 +94,19 @@ public class ProductoController {
 
     // Carga las categorias activas en el ComboBox
     private void cargarCategorias() {
+        ObservableList<Categoria> lista = FXCollections.observableArrayList(categoriaDAO.listar());
+
         if (cmbCategoria != null) {
-            cmbCategoria.setItems(FXCollections.observableArrayList(categoriaDAO.listar()));
+            cmbCategoria.setItems(lista);
+        }
+
+        // el filtro lleva la opcion "Todas" al inicio para poder mostrar todas
+        if (cmbFiltroCategoria != null){
+            ObservableList<Categoria> paraFiltro = FXCollections.observableArrayList();
+            paraFiltro.add(new Categoria(null, "Todas", true)); // id null significa sin filtro
+            paraFiltro.addAll(lista);
+            cmbFiltroCategoria.setItems(paraFiltro);
+            cmbFiltroCategoria.getSelectionModel().selectFirst();
         }
     }
 
@@ -103,6 +114,50 @@ public class ProductoController {
     private void cargarProductos() {
         productos.clear();
         productos.addAll(productoDAO.listar());
+    }
+
+    // aplica la busqueda y los filtros sobre la lista filtrada.
+    private void aplicarFiltros(){
+        String texto = (txtBuscar == null)? "" : txtBuscar.getText().trim().toLowerCase(); // if en una linea
+        String estado = (cmbFiltroEstado == null || cmbFiltroEstado.getValue() == null) ? "Todos" : cmbFiltroEstado.getValue();
+        Categoria categoria = (cmbFiltroCategoria == null)? null : cmbFiltroCategoria.getValue();
+
+        productosFiltrados.setPredicate(producto -> {
+            // busqueda por codigo, nombre o categoria
+            if (!texto.isEmpty()){
+                boolean coincide = contiene(producto.getCodigo(), texto)
+                        || contiene(producto.getNombre(), texto)
+                        || (producto.getCategoria() != null && contiene(producto.getCategoria().getNombre(), texto));
+                if(!coincide){
+                    return false;
+                }
+            }
+
+            // filtro por estado activos o inactivos
+            if ("Activos".equals(estado) && !producto.isActivo()) {
+                return false;
+            }
+            if ("Inactivos".equals(estado) && producto.isActivo()) {
+                return false;
+            }
+
+            // filtro por la categoria elegida en el combo
+            // la opcion "Todas" tiene id null, o sea que no filtra
+            if (categoria != null && categoria.getId() != null) {
+                if (producto.getCategoria() == null
+                        || !categoria.getId().equals(producto.getCategoria().getId())) {
+                    return false;
+                }
+            }
+
+            // si paso los tres filtros se muestra en la tabla
+            return true;
+        });
+    }
+
+    // compara sin importar mayusculas y evita error si el valor es nulo
+    private boolean contiene(String valor, String texto) {
+        return valor != null && valor.toLowerCase().contains(texto);
     }
 
     // Rellena el formulario con los datos del producto seleccionado en la tabla
@@ -206,8 +261,11 @@ public class ProductoController {
         }
 
         // Guarda el producto en PostgreSQL
-        productoDAO.guardar(producto);
-        mensaje(Alert.AlertType.INFORMATION, "Producto agregado correctamente.");
+        if (productoDAO.guardar(producto)) {
+            mensaje(Alert.AlertType.INFORMATION, "Producto agregado correctamente.");
+        } else {
+            mensaje(Alert.AlertType.ERROR, "No se pudo guardar el producto. Verifique la conexion a la base de datos.");
+        }
 
         // Refresca la tabla y limpia el formulario
         cargarProductos();
