@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_CENTER" prefHeight="650.0" prefWidth="850.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ni.edu.uam.fact_app.controller.ProductoController">
+<VBox alignment="TOP_CENTER" prefHeight="650.0" prefWidth="903.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ni.edu.uam.fact_app.controller.ProductoController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -64,9 +64,17 @@
 
         <HBox alignment="CENTER_RIGHT" spacing="10.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#guardar" prefWidth="100.0" text="Guardar" />
-                <Button mnemonicParsing="false" onAction="#limpiar" prefWidth="100.0" text="Limpiar" />
-                <Button mnemonicParsing="false" onAction="#cerrar" prefWidth="100.0" text="Cerrar" />
+            <Label text="Buscar:" />
+            <TextField fx:id="txtBuscar" prefHeight="26.0" prefWidth="167.0" promptText="Codigo, nombre o categoria" />
+            <Label text="Categoria" />
+            <ComboBox fx:id="cmbFiltroCategoria" prefHeight="26.0" prefWidth="86.0" />
+            <Label text="Estado:" />
+            <ComboBox fx:id="cmbFiltroEstado" prefHeight="26.0" prefWidth="65.0" />
+                <Button mnemonicParsing="false" onAction="#guardar" prefHeight="26.0" prefWidth="66.0" text="Guardar" />
+                <Button mnemonicParsing="false" onAction="#editar" prefHeight="26.0" prefWidth="50.0" text="Editar" />
+                <Button mnemonicParsing="false" onAction="#eliminar" prefHeight="26.0" prefWidth="60.0" text="Eliminar" />
+                <Button mnemonicParsing="false" onAction="#limpiar" prefHeight="26.0" prefWidth="55.0" text="Limpiar" />
+                <Button mnemonicParsing="false" onAction="#cerrar" prefHeight="26.0" prefWidth="51.0" text="Cerrar" />
             </children>
         </HBox>
 

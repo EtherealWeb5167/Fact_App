@@ -11,7 +11,7 @@ public class FacturacionApplication extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/ni.edu.uam.fact_app/fxml/menu-principal.fxml"));
         stage.setTitle("Sistema de Facturacion");
-        stage.setScene(new Scene(loader.load(), 980, 600));
+        stage.setScene(new Scene(loader.load(), 980, 700));
         stage.show();
     }
 

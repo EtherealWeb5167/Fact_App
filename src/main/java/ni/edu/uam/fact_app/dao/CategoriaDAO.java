@@ -57,4 +57,67 @@ public class CategoriaDAO {
         }
         return lista;
     }
+
+    // Actualiza el nombre y el estado de una categoria existente
+    public boolean actualizar(Categoria categoria) {
+        String sql = "UPDATE categoria SET nombre = ?, activa = ? WHERE id = ?";
+
+        // Abre la conexion y prepara la sentencia
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, categoria.getNombre());
+            ps.setBoolean(2, categoria.isActiva());
+            ps.setInt(3, categoria.getId());
+
+            // Ejecuta el update en PostgreSQL
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Elimina una categoria por su id
+    public boolean eliminar(Integer id) {
+        String sql = "DELETE FROM categoria WHERE id = ?";
+
+        // Abre la conexion y prepara la sentencia
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            // Ejecuta el delete en PostgreSQL
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            // Falla si la categoria tiene productos relacionados (llave foranea)
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Verifica si ya existe otra categoria con el mismo nombre (sin distinguir mayusculas)
+    public boolean existeNombre(String nombre, Integer idExcluir) {
+        String sql = "SELECT 1 FROM categoria WHERE LOWER(nombre) = LOWER(?) AND id <> ? LIMIT 1";
+
+        // Abre la conexion y prepara la consulta
+        try (Connection con = ConexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+            // Al insertar (id null) se usa -1 para no excluir ninguna fila
+            ps.setInt(2, idExcluir != null ? idExcluir : -1);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

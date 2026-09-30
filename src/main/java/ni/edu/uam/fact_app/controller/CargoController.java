@@ -8,6 +8,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import ni.edu.uam.fact_app.model.Cargo;
 
+import java.util.Objects;
+
 public class CargoController {
 
     @FXML private TextField txtId;
@@ -33,16 +35,42 @@ public class CargoController {
 
         if (tblCargos != null) {
             tblCargos.setItems(cargos);
+
+            // Al seleccionar una fila de la tabla se cargan sus datos en el formulario
+            tblCargos.getSelectionModel().selectedItemProperty().addListener(
+                    (obs, valorAnterior, valorNuevo) -> {
+                        if (valorNuevo != null) {
+                            txtId.setText(valorNuevo.getId() != null ? String.valueOf(valorNuevo.getId()) : "");
+                            txtNombre.setText(valorNuevo.getNombre());
+                            txtDescripcion.setText(valorNuevo.getDescripcion());
+                        }
+                    });
         }
+    }
+
+    // Valida que el nombre no este vacio ni repetido en la tabla.
+    // "excluir" es el cargo que se esta editando (null al agregar uno nuevo)
+    private boolean validarNombre(String nombre, Cargo excluir) {
+        if (nombre.isEmpty()) {
+            mensaje(Alert.AlertType.WARNING, "El nombre del cargo es obligatorio.");
+            return false;
+        }
+
+        boolean repetido = cargos.stream()
+                .anyMatch(c -> c != excluir && nombre.equalsIgnoreCase(c.getNombre()));
+        if (repetido) {
+            mensaje(Alert.AlertType.WARNING, "Ya existe un cargo con ese nombre.");
+            return false;
+        }
+        return true;
     }
 
     @FXML
     private void guardar() {
         String nombre = txtNombre.getText().trim();
-        String descripcion = txtDescripcion.getText().trim();
 
-        if (nombre.isEmpty()) {
-            mensaje(Alert.AlertType.WARNING, "El nombre del cargo es obligatorio.");
+        // Detiene el registro si el nombre esta vacio o repetido
+        if (!validarNombre(nombre, null)) {
             return;
         }
 
@@ -51,17 +79,79 @@ public class CargoController {
             if (!txtId.getText().isBlank()) {
                 id = Integer.parseInt(txtId.getText().trim());
             } else {
-                id = cargos.size() + 1;
+                // Id maximo + 1 para evitar duplicados tras una eliminacion
+                id = cargos.stream()
+                        .map(Cargo::getId)
+                        .filter(Objects::nonNull)
+                        .max(Integer::compareTo)
+                        .orElse(0) + 1;
             }
         } catch (NumberFormatException e) {
             mensaje(Alert.AlertType.ERROR, "El id debe ser un numero entero valido.");
             return;
         }
 
-        Cargo cargo = new Cargo(id, nombre, descripcion);
+        Cargo cargo = new Cargo(id, nombre, txtDescripcion.getText().trim());
         cargos.add(cargo);
         mensaje(Alert.AlertType.INFORMATION, "Cargo registrado correctamente.");
         limpiar();
+    }
+
+    @FXML
+    private void editar() {
+        Cargo seleccionado = tblCargos.getSelectionModel().getSelectedItem();
+
+        if (seleccionado == null) {
+            mensaje(Alert.AlertType.WARNING, "Seleccione un cargo de la tabla para editar.");
+            return;
+        }
+
+        String nombre = txtNombre.getText().trim();
+
+        // El propio cargo seleccionado se excluye del chequeo de nombre repetido
+        if (!validarNombre(nombre, seleccionado)) {
+            return;
+        }
+
+        // Conserva el id original y actualiza nombre y descripcion
+        seleccionado.setNombre(nombre);
+        seleccionado.setDescripcion(txtDescripcion.getText().trim());
+
+        if (tblCargos != null) {
+            tblCargos.refresh();
+        }
+
+        mensaje(Alert.AlertType.INFORMATION, "Cargo actualizado correctamente.");
+        limpiar();
+    }
+
+    @FXML
+    private void eliminar() {
+        Cargo seleccionado = tblCargos.getSelectionModel().getSelectedItem();
+
+        if (seleccionado == null) {
+            mensaje(Alert.AlertType.WARNING, "Seleccione un cargo de la tabla para eliminar.");
+            return;
+        }
+
+        if (!confirmar("¿Desea eliminar el cargo \"" + seleccionado.getNombre() + "\"?")) {
+            return;
+        }
+
+        cargos.remove(seleccionado);
+
+        if (tblCargos != null) {
+            tblCargos.refresh();
+        }
+
+        mensaje(Alert.AlertType.INFORMATION, "Cargo eliminado correctamente.");
+        limpiar();
+    }
+
+    // Ventana de confirmacion: devuelve true solo si el usuario acepta
+    private boolean confirmar(String texto) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, texto, ButtonType.YES, ButtonType.NO);
+        return alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES;
     }
 
     @FXML

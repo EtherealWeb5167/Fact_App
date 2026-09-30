@@ -42,6 +42,8 @@
       <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
             <Button mnemonicParsing="false" onAction="#guardar" prefWidth="90.0" text="Agregar" />
+            <Button mnemonicParsing="false" onAction="#editar" prefWidth="90.0" text="Editar" />
+            <Button mnemonicParsing="false" onAction="#eliminar" prefWidth="90.0" text="Eliminar" />
             <Button mnemonicParsing="false" onAction="#limpiar" prefWidth="90.0" text="Limpiar" />
             <Button mnemonicParsing="false" onAction="#cerrar" prefWidth="90.0" text="Cerrar" />
          </children>
