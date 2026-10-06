@@ -15,7 +15,8 @@ public class ProductoDAO {
 
     // Guarda un nuevo producto con su categoria relacionada
     // devuelve true si el INSERT se guardo en la base de datos
-    public boolean guardar(Producto producto) {
+    // los errores de SQL no se capturan aqui, se declaran y los maneja el controlador
+    public boolean guardar(Producto producto) throws SQLException {
         String sql = """
             INSERT INTO producto (
                 codigo,
@@ -45,15 +46,11 @@ public class ProductoDAO {
 
             // Ejecuta el insert en PostgreSQL
             return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
     // Consulta todos los productos uniendo la tabla categoria con INNER JOIN
-    public List<Producto> listar() {
+    public List<Producto> listar() throws SQLException {
         List<Producto> lista = new ArrayList<>();
         String sql = """
             SELECT p.*, c.nombre AS categoria_nombre, c.activa AS categoria_activa
@@ -90,15 +87,12 @@ public class ProductoDAO {
 
                 lista.add(p);
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return lista;
     }
 
     // Actualiza un producto existente por su id
-    public boolean actualizar(Producto producto) {
+    public boolean actualizar(Producto producto) throws SQLException {
         String sql = """
             UPDATE producto SET
                 codigo = ?,
@@ -128,15 +122,11 @@ public class ProductoDAO {
 
             // Ejecuta el update en PostgreSQL
             return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
     // Elimina un producto por su id
-    public boolean eliminar(Integer id) {
+    public boolean eliminar(Integer id) throws SQLException {
         String sql = "DELETE FROM producto WHERE id = ?";
 
         // Abre la conexion y prepara la sentencia
@@ -147,15 +137,11 @@ public class ProductoDAO {
 
             // Ejecuta el delete en PostgreSQL
             return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
     // Verifica si ya existe otro producto con el mismo codigo (sin distinguir mayusculas)
-    public boolean existeCodigo(String codigo, Integer idExcluir) {
+    public boolean existeCodigo(String codigo, Integer idExcluir) throws SQLException {
         String sql = "SELECT 1 FROM producto WHERE LOWER(codigo) = LOWER(?) AND id <> ? LIMIT 1";
 
         // Abre la conexion y prepara la consulta
@@ -169,10 +155,6 @@ public class ProductoDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 }
