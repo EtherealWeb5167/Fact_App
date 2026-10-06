@@ -15,7 +15,6 @@ public class ProductoDAO {
 
     // Guarda un nuevo producto con su categoria relacionada
     // devuelve true si el INSERT se guardo en la base de datos
-    // los errores de SQL no se capturan aqui, se declaran y los maneja el controlador
     public boolean guardar(Producto producto) throws SQLException {
         String sql = """
             INSERT INTO producto (
@@ -44,7 +43,7 @@ public class ProductoDAO {
             ps.setString(6, producto.getRutaImagen());
             ps.setBoolean(7, producto.isActivo());
 
-            // Ejecuta el insert en PostgreSQL
+            // Ejecuta el insert en postgre
             return ps.executeUpdate() > 0;
         }
     }
@@ -120,7 +119,7 @@ public class ProductoDAO {
             ps.setBoolean(7, producto.isActivo());
             ps.setInt(8, producto.getId());
 
-            // Ejecuta el update en PostgreSQL
+            // Ejecuta el update en postgre
             return ps.executeUpdate() > 0;
         }
     }
